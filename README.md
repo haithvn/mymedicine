@@ -10,6 +10,11 @@ A full-stack medicine management application built with Next.js, React, and Post
 - ✏️ **Edit & Delete**: Full edit and delete functionality for all entities
 - 🔄 **Real-time Updates**: Immediate UI updates after any operation
 
+## 🚀 Live Demo
+
+- **Frontend**: [https://mymedicine-frontend.vercel.app](https://mymedicine-frontend.vercel.app)
+- **Backend API**: [https://mymedicine-backend.vercel.app](https://mymedicine-backend.vercel.app)
+
 ## Tech Stack
 
 ### Backend
@@ -144,6 +149,33 @@ cd frontend
 npm run dev          # Start dev server
 npm run build        # Build for production
 npm run preview      # Preview production build
+```
+
+## Deployment to Vercel
+
+The application is deployed as two separate projects on Vercel:
+
+### 1. Backend (Next.js)
+- **Root Directory**: `backend/`
+- **Environment Variables**:
+  - `DATABASE_URL`: Connection string to Neon PostgreSQL
+- **Build Command**: `npm run build`
+
+### 2. Frontend (Vite)
+- **Root Directory**: `frontend/`
+- **Build Command**: `npm run build`
+- **Environment Variables**:
+  - `VITE_API_BASE_URL`: URL of the deployed backend API (e.g., `https://mymedicine-backend.vercel.app/api`)
+
+To deploy manually via CLI:
+```bash
+# Backend
+cd backend
+vercel --prod
+
+# Frontend
+cd frontend
+vercel --prod
 ```
 
 ## Contributing
