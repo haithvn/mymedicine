@@ -32,6 +32,7 @@
         "loading_schedule": "Đang tải lịch trình...",
         "no_scheduled": "Không có lịch uống thuốc hôm nay.",
         "pending": "Đang chờ",
+        "taken": "Đã uống",
         "monthly_prescriptions": "Đơn thuốc theo tháng",
         "medicine_stats": "Thống kê thuốc theo tháng",
         "top_medicines": "Cơ cấu loại thuốc",

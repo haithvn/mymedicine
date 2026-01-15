@@ -32,6 +32,7 @@
         "loading_schedule": "Loading schedule...",
         "no_scheduled": "No medicines scheduled for today.",
         "pending": "Pending",
+        "taken": "Taken",
         "monthly_prescriptions": "Monthly Prescriptions",
         "medicine_stats": "Medicine Usage by Month",
         "top_medicines": "Top Medicines Distribution",

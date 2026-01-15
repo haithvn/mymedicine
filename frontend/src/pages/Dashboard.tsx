@@ -175,21 +175,29 @@ export function Dashboard() {
                             </div>
                         ) : (
                             <div className="divide-y divide-gray-100">
-                                {reminders.map((rem: Reminder, idx: number) => (
-                                    <div key={idx} className="p-4 flex items-center hover:bg-gray-50 transition-all border-l-4 border-transparent hover:border-blue-500 cursor-pointer">
-                                        <div className="w-14 text-center">
-                                            <p className="text-lg font-bold text-blue-600 leading-none">{rem.time.split(':')[0]}</p>
-                                            <p className="text-[10px] font-bold text-gray-400">AM</p>
-                                        </div>
-                                        <div className="flex-1 ml-4 overflow-hidden">
-                                            <h3 className="font-bold text-gray-900 truncate">{rem.medicine}</h3>
-                                            <p className="text-xs text-gray-500 truncate">{rem.dosage} • {rem.disease}</p>
-                                        </div>
-                                        <div className="text-[10px] font-bold px-2 py-1 bg-yellow-100 text-yellow-700 rounded-lg whitespace-nowrap">
-                                            {t('dashboard.pending')}
-                                        </div>
-                                    </div>
-                                ))}
+                                {reminders
+                                    .sort((a, b) => a.time.localeCompare(b.time))
+                                    .map((rem: Reminder, idx: number) => {
+                                        const currentTimeStr = format(now, 'HH:mm');
+                                        const isPast = rem.time <= currentTimeStr;
+
+                                        return (
+                                            <div key={idx} className="p-4 flex items-center hover:bg-gray-50 transition-all border-l-4 border-transparent hover:border-blue-500 cursor-pointer">
+                                                <div className="w-14 text-center">
+                                                    <p className={`text-lg font-bold leading-none ${isPast ? 'text-gray-400' : 'text-blue-600'}`}>{rem.time.split(':')[0]}</p>
+                                                    <p className="text-[10px] font-bold text-gray-400">{parseInt(rem.time.split(':')[0]) >= 12 ? 'PM' : 'AM'}</p>
+                                                </div>
+                                                <div className="flex-1 ml-4 overflow-hidden">
+                                                    <h3 className={`font-bold truncate ${isPast ? 'text-gray-400 line-through' : 'text-gray-900'}`}>{rem.medicine}</h3>
+                                                    <p className="text-xs text-gray-500 truncate">{rem.dosage} • {rem.disease}</p>
+                                                </div>
+                                                <div className={`text-[10px] font-bold px-2 py-1 rounded-lg whitespace-nowrap ${isPast ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                                                    }`}>
+                                                    {isPast ? t('dashboard.taken') : t('dashboard.pending')}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                             </div>
                         )}
                     </div>
