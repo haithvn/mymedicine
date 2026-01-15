@@ -26,11 +26,18 @@
     },
     "dashboard": {
         "title": "Bảng điều khiển",
+        "current_time": "Thời gian hiện tại",
         "upcoming_reminders": "Nhắc nhở sắp tới",
         "todays_schedule": "Lịch trình hôm nay",
         "loading_schedule": "Đang tải lịch trình...",
         "no_scheduled": "Không có lịch uống thuốc hôm nay.",
-        "pending": "Đang chờ"
+        "pending": "Đang chờ",
+        "monthly_prescriptions": "Đơn thuốc theo tháng",
+        "medicine_stats": "Thống kê thuốc theo tháng",
+        "top_medicines": "Cơ cấu loại thuốc",
+        "intake_frequency": "Tần suất uống thuốc",
+        "summary": "Thống kê tổng quan",
+        "prescriptions_added": "Số đơn thuốc đã thêm"
     },
     "medicines": {
         "title": "Tủ thuốc",

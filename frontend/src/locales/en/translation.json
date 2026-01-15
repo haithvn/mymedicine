@@ -26,11 +26,18 @@
     },
     "dashboard": {
         "title": "Dashboard",
+        "current_time": "Current Time",
         "upcoming_reminders": "Upcoming Reminders",
         "todays_schedule": "Today's Schedule",
         "loading_schedule": "Loading schedule...",
         "no_scheduled": "No medicines scheduled for today.",
-        "pending": "Pending"
+        "pending": "Pending",
+        "monthly_prescriptions": "Monthly Prescriptions",
+        "medicine_stats": "Medicine Usage by Month",
+        "top_medicines": "Top Medicines Distribution",
+        "intake_frequency": "Intake Frequency",
+        "summary": "Summary statistics",
+        "prescriptions_added": "Prescriptions Added"
     },
     "medicines": {
         "title": "Medicine Cabinet",
