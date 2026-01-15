@@ -27,6 +27,7 @@ interface Prescription {
     id: string;
     createdAt: string;
     scheduledTimes: string[];
+    disease: { name: string };
     prescriptionMedicines: { medicine: { name: string } }[];
 }
 
@@ -58,7 +59,7 @@ export function Dashboard() {
                     api.get('/prescriptions')
                 ]);
 
-                setReminders(remRes.data.slice(0, 5));
+                setReminders(remRes.data);
                 setMedicines(medRes.data);
                 setPrescriptions(preRes.data);
             } catch (e) {
@@ -73,65 +74,56 @@ export function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    // Aggregation Logic
-    const getMonthlyPrescriptions = () => {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const data = months.map(m => ({ month: m, count: 0 }));
-
-        prescriptions.forEach(p => {
-            const date = new Date(p.createdAt);
-            const monthIdx = date.getMonth();
-            data[monthIdx].count++;
-        });
-
-        // Show last 6 months including current
-        const currentMonth = new Date().getMonth();
-        return data.slice(Math.max(0, currentMonth - 5), currentMonth + 1);
+    // 1. Stock Status: Medicines below 5 units
+    const getLowStockMedicines = () => {
+        return medicines
+            .filter(m => m.quantity < 5)
+            .sort((a, b) => a.quantity - b.quantity)
+            .slice(0, 5)
+            .map(m => ({ name: m.name, quantity: m.quantity }));
     };
 
-    const getTopMedicines = () => {
-        const counts: Record<string, number> = {};
+    // 2. Peak Hours: Hourly distribution (0-23)
+    const getIntakePeakHours = () => {
+        const hours = Array.from({ length: 24 }, (_, i) => ({ hour: `${i}h`, count: 0 }));
         prescriptions.forEach(p => {
-            p.prescriptionMedicines.forEach(pm => {
-                const name = pm.medicine.name;
-                counts[name] = (counts[name] || 0) + 1;
+            p.scheduledTimes?.forEach(time => {
+                const h = parseInt(time.split(':')[0]);
+                hours[h].count++;
             });
         });
-
-        return Object.entries(counts)
-            .map(([name, value]) => ({ name, value }))
-            .sort((a, b) => b.value - a.value)
-            .slice(0, 4);
+        // Filter out hours with 0 count to make it cleaner, or keep all? 
+        // Let's keep 4 main blocks or all if not too crowded.
+        return hours.filter(h => h.count > 0);
     };
 
-    const getMedicineStats = () => {
-        // Simple usage trend: total doses per month (approximate based on prescriptions)
-        const data: Record<string, number> = {};
+    // 3. Medication by Disease: Pie Chart
+    const getMedicationByDisease = () => {
+        const counts: Record<string, number> = {};
         prescriptions.forEach(p => {
-            const month = format(new Date(p.createdAt), 'MMM');
-            const dailyDoses = (p.scheduledTimes?.length || 0);
-            data[month] = (data[month] || 0) + (dailyDoses * 30); // Approx monthly doses
+            const diseaseName = p.disease?.name || 'Unknown';
+            counts[diseaseName] = (counts[diseaseName] || 0) + 1;
         });
-
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        return months
-            .filter(m => data[m] !== undefined)
-            .map(m => ({ month: m, usage: data[m] }));
+        return Object.entries(counts).map(([name, value]) => ({ name, value }));
     };
 
-    const getFrequencyTrend = () => {
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        return days.map(d => {
-            // Very basic mock logic: assume equal distribution for demo of "trend"
-            const total = prescriptions.reduce((acc, p) => acc + (p.scheduledTimes?.length || 0), 0);
-            return { day: d, freq: Math.round(total / 7) + Math.floor(Math.random() * 2) };
-        });
+    // 4. Daily Adherence: Radial/Progress
+    const getDailyAdherence = () => {
+        const currentTimeStr = format(now, 'HH:mm');
+        const total = reminders.length;
+        const taken = reminders.filter(r => r.time <= currentTimeStr).length;
+        const percent = total > 0 ? Math.round((taken / total) * 100) : 0;
+
+        return [
+            { name: 'Completed', value: percent, fill: '#10B981' },
+            { name: 'Remaining', value: 100 - percent, fill: '#F3F4F6' }
+        ];
     };
 
-    const monthlyData = getMonthlyPrescriptions();
-    const topMedData = getTopMedicines();
-    const medStatsData = getMedicineStats();
-    const freqTrendData = getFrequencyTrend();
+    const stockData = getLowStockMedicines();
+    const peakHoursData = getIntakePeakHours();
+    const diseaseData = getMedicationByDisease();
+    const adherenceData = getDailyAdherence();
 
     const currentLocale = i18n.language === 'vi' ? vi : enUS;
 
@@ -178,16 +170,23 @@ export function Dashboard() {
                         </div>
                     </div>
 
-                    {/* Bar Chart: Monthly Prescriptions */}
+                    {/* Bar Chart: Stock Status (Horizontal) */}
                     <div className="md:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-80">
-                        <h3 className="text-lg font-semibold mb-4">{t('dashboard.monthly_prescriptions')}</h3>
-                        <ResponsiveContainer width="100%" height="90%">
-                            <BarChart data={monthlyData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                                <XAxis dataKey="month" axisLine={false} tickLine={false} />
-                                <YAxis axisLine={false} tickLine={false} />
-                                <Tooltip cursor={{ fill: '#F9FAFB' }} />
-                                <Bar dataKey="count" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                        <div className="flex justify-between items-start mb-4">
+                            <h3 className="text-lg font-semibold">{t('dashboard.stock_status')}</h3>
+                            {stockData.length > 0 && (
+                                <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-1 rounded-lg">
+                                    {t('dashboard.low_stock_warning')}
+                                </span>
+                            )}
+                        </div>
+                        <ResponsiveContainer width="100%" height="80%">
+                            <BarChart data={stockData} layout="vertical">
+                                <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#F3F4F6" />
+                                <XAxis type="number" hide />
+                                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={100} fontSize={12} />
+                                <Tooltip cursor={{ fill: '#FEF2F2' }} />
+                                <Bar dataKey="quantity" fill="#EF4444" radius={[0, 4, 4, 0]} barSize={20} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -210,6 +209,7 @@ export function Dashboard() {
                         ) : (
                             <div className="divide-y divide-gray-100">
                                 {reminders
+                                    .slice(0, 5) // Show only 5 as requested
                                     .sort((a, b) => a.time.localeCompare(b.time))
                                     .map((rem: Reminder, idx: number) => {
                                         const currentTimeStr = format(now, 'HH:mm');
@@ -240,37 +240,35 @@ export function Dashboard() {
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Line Chart: Medicine Stats */}
+                {/* Bar Chart: Peak Hours */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-80">
-                    <h3 className="text-lg font-semibold mb-4">{t('dashboard.medicine_stats')}</h3>
+                    <h3 className="text-lg font-semibold mb-4">{t('dashboard.peak_hours')}</h3>
                     <ResponsiveContainer width="100%" height="90%">
-                        <LineChart data={medStatsData}>
+                        <BarChart data={peakHoursData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-                            <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                            <XAxis dataKey="hour" axisLine={false} tickLine={false} fontSize={10} />
                             <YAxis axisLine={false} tickLine={false} />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="usage" stroke="#6366F1" strokeWidth={3} dot={{ fill: '#6366F1', r: 4 }} activeDot={{ r: 6 }} />
-                        </LineChart>
+                            <Tooltip cursor={{ fill: '#EEF2FF' }} />
+                            <Bar dataKey="count" fill="#6366F1" radius={[4, 4, 0, 0]} />
+                        </BarChart>
                     </ResponsiveContainer>
                 </div>
 
-                {/* Pie Chart: Distribution */}
+                {/* Pie Chart: Medication by Disease */}
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-80">
-                    <h3 className="text-lg font-semibold mb-4">{t('dashboard.top_medicines')}</h3>
+                    <h3 className="text-lg font-semibold mb-4">{t('dashboard.medication_by_disease')}</h3>
                     <ResponsiveContainer width="100%" height="90%">
                         <PieChart>
                             <Pie
-                                data={topMedData}
+                                data={diseaseData}
                                 cx="50%"
                                 cy="50%"
                                 innerRadius={60}
                                 outerRadius={80}
                                 paddingAngle={5}
                                 dataKey="value"
-                                animationBegin={0}
-                                animationDuration={1500}
                             >
-                                {topMedData.map((_, index) => (
+                                {diseaseData.map((_, index) => (
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
@@ -279,24 +277,34 @@ export function Dashboard() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Area Chart: Frequency */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-80">
-                    <h3 className="text-lg font-semibold mb-4">{t('dashboard.intake_frequency')}</h3>
-                    <ResponsiveContainer width="100%" height="90%">
-                        <AreaChart data={freqTrendData}>
-                            <defs>
-                                <linearGradient id="colorFreq" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8} />
-                                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
-                                </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                            <XAxis dataKey="day" axisLine={false} tickLine={false} />
-                            <YAxis axisLine={false} tickLine={false} />
-                            <Tooltip />
-                            <Area type="monotone" dataKey="freq" stroke="#8B5CF6" fillOpacity={1} fill="url(#colorFreq)" strokeWidth={3} />
-                        </AreaChart>
-                    </ResponsiveContainer>
+                {/* Radial Progress: Adherence */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-80 flex flex-col items-center">
+                    <h3 className="text-lg font-semibold mb-4 w-full text-left">{t('dashboard.adherence_progress')}</h3>
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={adherenceData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={70}
+                                    outerRadius={90}
+                                    startAngle={90}
+                                    endAngle={-270}
+                                    dataKey="value"
+                                    stroke="none"
+                                >
+                                    {adherenceData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                                    ))}
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                        <div className="absolute flex flex-col items-center">
+                            <span className="text-4xl font-bold text-gray-900">{adherenceData[0].value}%</span>
+                            <span className="text-xs text-green-600 font-bold uppercase">{t('dashboard.taken')}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

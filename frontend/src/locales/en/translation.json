@@ -33,12 +33,13 @@
         "no_scheduled": "No medicines scheduled for today.",
         "pending": "Pending",
         "taken": "Taken",
-        "monthly_prescriptions": "Monthly Prescriptions",
-        "medicine_stats": "Medicine Usage by Month",
-        "top_medicines": "Top Medicines Distribution",
-        "intake_frequency": "Intake Frequency",
-        "summary": "Summary statistics",
-        "prescriptions_added": "Prescriptions Added"
+        "stock_status": "Low Stock Medicines",
+        "peak_hours": "Intake Peak Hours (24h)",
+        "medication_by_disease": "Medication by Disease",
+        "adherence_progress": "Daily Adherence Progress",
+        "summary": "Health Insights & Statistics",
+        "prescriptions_added": "Prescriptions Total",
+        "low_stock_warning": "Warning: Items below 5 units."
     },
     "medicines": {
         "title": "Medicine Cabinet",

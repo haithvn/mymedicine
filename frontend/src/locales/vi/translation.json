@@ -33,12 +33,13 @@
         "no_scheduled": "Không có lịch uống thuốc hôm nay.",
         "pending": "Đang chờ",
         "taken": "Đã uống",
-        "monthly_prescriptions": "Đơn thuốc theo tháng",
-        "medicine_stats": "Thống kê thuốc theo tháng",
-        "top_medicines": "Cơ cấu loại thuốc",
-        "intake_frequency": "Tần suất uống thuốc",
-        "summary": "Thống kê tổng quan",
-        "prescriptions_added": "Số đơn thuốc đã thêm"
+        "stock_status": "Thuốc sắp hết (Dưới 5 đơn vị)",
+        "peak_hours": "Khung giờ uống thuốc cao điểm",
+        "medication_by_disease": "Phân bổ thuốc theo bệnh lý",
+        "adherence_progress": "Tiến độ hoàn thành trong ngày",
+        "summary": "Phân tích sức khỏe & Thống kê",
+        "prescriptions_added": "Tổng số đơn thuốc",
+        "low_stock_warning": "Chú ý: Các loại thuốc cần bổ sung sớm."
     },
     "medicines": {
         "title": "Tủ thuốc",
