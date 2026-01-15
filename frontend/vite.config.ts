@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react() as any],
   // @ts-ignore - Vitest types conflict with Vite 7
   test: {
     globals: true,
