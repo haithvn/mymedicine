@@ -1,7 +1,7 @@
 import { render, screen, act } from '@testing-library/react';
 import React from 'react';
 import { useTranslation, I18nextProvider } from 'react-i18next';
-// @ts-expect-error
+// @ts-expect-error - i18next type mismatch in tests
 import i18n from './i18n';
 
 const TestComponent = () => {
@@ -21,9 +21,9 @@ describe('i18n integration', () => {
 
     it('renders Vietnamese translation when language changes', async () => {
         await act(async () => {
-            // @ts-expect-error
+            // @ts-expect-error - testing dynamic language change
             if (i18n.changeLanguage) {
-                // @ts-expect-error
+                // @ts-expect-error - testing dynamic language change
                 await i18n.changeLanguage('vi');
             }
         });
