@@ -159,14 +159,16 @@ export function Dashboard() {
                         <div className="p-4 bg-blue-100 rounded-full text-blue-600"><Pill className="w-6 h-6" /></div>
                         <div>
                             <p className="text-sm text-gray-500">{t('dashboard.upcoming_reminders')}</p>
-                            <p className="text-2xl font-bold text-gray-900">{reminders.length}</p>
+                            <p className="text-2xl font-bold text-gray-900">
+                                {reminders.filter(r => r.time > format(now, 'HH:mm')).length}
+                            </p>
                         </div>
                     </div>
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4 hover:shadow-md transition-shadow">
                         <div className="p-4 bg-indigo-100 rounded-full text-indigo-600"><CheckCircle className="w-6 h-6" /></div>
                         <div>
                             <p className="text-sm text-gray-500">{t('dashboard.prescriptions_added')}</p>
-                            <p className="text-2xl font-bold text-gray-900">45</p>
+                            <p className="text-2xl font-bold text-gray-900">{prescriptions.length}</p>
                         </div>
                     </div>
 
@@ -201,7 +203,7 @@ export function Dashboard() {
                     <div className="flex-1 overflow-y-auto max-h-[500px]">
                         {loading ? (
                             <div className="p-8 text-center text-gray-500">{t('dashboard.loading_schedule')}</div>
-                        ) : reminders.length === 0 ? (
+                        ) : reminders.filter(r => r.time > format(now, 'HH:mm')).length === 0 ? (
                             <div className="p-8 text-center text-gray-500 flex flex-col items-center">
                                 <CheckCircle className="w-12 h-12 text-gray-200 mb-3" />
                                 {t('dashboard.no_scheduled')}
@@ -209,29 +211,23 @@ export function Dashboard() {
                         ) : (
                             <div className="divide-y divide-gray-100">
                                 {reminders
-                                    .slice(0, 5) // Show only 5 as requested
+                                    .filter(rem => rem.time > format(now, 'HH:mm'))
                                     .sort((a, b) => a.time.localeCompare(b.time))
-                                    .map((rem: Reminder, idx: number) => {
-                                        const currentTimeStr = format(now, 'HH:mm');
-                                        const isPast = rem.time <= currentTimeStr;
-
-                                        return (
-                                            <div key={idx} className="p-4 flex items-center hover:bg-gray-50 transition-all border-l-4 border-transparent hover:border-blue-500 cursor-pointer">
-                                                <div className="w-14 text-center">
-                                                    <p className={`text-lg font-bold leading-none ${isPast ? 'text-gray-400' : 'text-blue-600'}`}>{rem.time.split(':')[0]}</p>
-                                                    <p className="text-[10px] font-bold text-gray-400">{parseInt(rem.time.split(':')[0]) >= 12 ? 'PM' : 'AM'}</p>
-                                                </div>
-                                                <div className="flex-1 ml-4 overflow-hidden">
-                                                    <h3 className={`font-bold truncate ${isPast ? 'text-gray-400 line-through' : 'text-gray-900'}`}>{rem.medicine}</h3>
-                                                    <p className="text-xs text-gray-500 truncate">{rem.dosage} • {rem.disease}</p>
-                                                </div>
-                                                <div className={`text-[10px] font-bold px-2 py-1 rounded-lg whitespace-nowrap ${isPast ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                                                    }`}>
-                                                    {isPast ? t('dashboard.taken') : t('dashboard.pending')}
-                                                </div>
+                                    .map((rem: Reminder, idx: number) => (
+                                        <div key={idx} className="p-4 flex items-center hover:bg-gray-50 transition-all border-l-4 border-transparent hover:border-blue-500 cursor-pointer">
+                                            <div className="w-14 text-center">
+                                                <p className="text-lg font-bold leading-none text-blue-600">{rem.time.split(':')[0]}</p>
+                                                <p className="text-[10px] font-bold text-gray-400">{parseInt(rem.time.split(':')[0]) >= 12 ? 'PM' : 'AM'}</p>
                                             </div>
-                                        );
-                                    })}
+                                            <div className="flex-1 ml-4 overflow-hidden">
+                                                <h3 className="font-bold truncate text-gray-900">{rem.medicine}</h3>
+                                                <p className="text-xs text-gray-500 truncate">{rem.dosage} • {rem.disease}</p>
+                                            </div>
+                                            <div className="text-[10px] font-bold px-2 py-1 rounded-lg whitespace-nowrap bg-yellow-100 text-yellow-700">
+                                                {t('dashboard.pending')}
+                                            </div>
+                                        </div>
+                                    ))}
                             </div>
                         )}
                     </div>
