@@ -1,9 +1,15 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Pill, Activity, CalendarClock, Menu } from 'lucide-react';
+import { LayoutDashboard, Pill, Activity, CalendarClock, Menu, Languages } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function Layout() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { t, i18n } = useTranslation();
+
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
 
     const navItems = [
         { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -20,7 +26,30 @@ export function Layout() {
                     <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">M</div>
                     <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">My Medicine</span>
                 </div>
+
+                <div className="px-6 py-4">
+                    <div className="flex items-center space-x-2 bg-gray-50 p-2 rounded-lg">
+                        <Languages className="w-4 h-4 text-gray-500" />
+                        <button
+                            onClick={() => changeLanguage('en')}
+                            className={`text-sm font-medium ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            EN
+                        </button>
+                        <span className="text-gray-300">|</span>
+                        <button
+                            onClick={() => changeLanguage('vi')}
+                            className={`text-sm font-medium ${i18n.language === 'vi' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            VI
+                        </button>
+                    </div>
+                </div>
+
                 <nav className="flex-1 p-4 space-y-1">
+                    <div className="px-4 pb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                        {t('welcome')}
+                    </div>
                     {navItems.map((item) => (
                         <NavLink
                             key={item.to}
@@ -52,6 +81,11 @@ export function Layout() {
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (
                     <div className="md:hidden absolute top-16 left-0 right-0 bg-white border-b border-gray-200 z-50 shadow-lg p-4 space-y-2">
+                        <div className="flex items-center space-x-4 p-2 mb-2 bg-gray-50 rounded-lg">
+                            <span className="text-sm font-medium text-gray-600">Language:</span>
+                            <button onClick={() => changeLanguage('en')} className={`text-sm font-bold ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-400'}`}>EN</button>
+                            <button onClick={() => changeLanguage('vi')} className={`text-sm font-bold ${i18n.language === 'vi' ? 'text-blue-600' : 'text-gray-400'}`}>VI</button>
+                        </div>
                         {navItems.map((item) => (
                             <NavLink
                                 key={item.to}
