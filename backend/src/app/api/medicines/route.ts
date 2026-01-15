@@ -9,7 +9,7 @@ const createMedicineSchema = z.object({
     name: z.string().min(1),
     manufacturer: z.string().optional(),
     activeIngredients: z.string().optional(),
-    price: z.coerce.number().optional(),
+    price: z.string().optional(),
     quantity: z.coerce.number().default(0),
     unit: z.string().optional(),
     status: z.enum(['available', 'out_of_stock']).default('available'),
