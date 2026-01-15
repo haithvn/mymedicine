@@ -24,6 +24,7 @@ export function Diseases() {
     }, []);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchDiseases();
     }, [fetchDiseases]);
 
