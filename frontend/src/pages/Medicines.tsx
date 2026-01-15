@@ -14,7 +14,7 @@ interface Medicine {
 
 export function Medicines() {
     const [medicines, setMedicines] = useState<Medicine[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({ name: '', manufacturer: '', quantity: 0, unit: 'tablet' });
     const [editingId, setEditingId] = useState<string | null>(null);

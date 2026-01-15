@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../services/api';
-import { Pill, AlertCircle, CheckCircle } from 'lucide-react';
+import { Pill, CheckCircle } from 'lucide-react';
 
 interface Reminder {
     time: string;
@@ -44,12 +44,7 @@ export function Dashboard() {
     }, []);
 
     const checkReminders = () => {
-        // Logic to trigger browser notification if time matches current time
-        const paramNow = new Date();
-        const timeString = paramNow.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-
         // Simplified check for demo
-        // In real world, we need to track which ones we already notified for
     };
 
     return (
@@ -82,7 +77,7 @@ export function Dashboard() {
                     </div>
                 ) : (
                     <div className="divide-y divide-gray-100">
-                        {reminders.map((rem, idx) => (
+                        {reminders.map((rem: Reminder, idx: number) => (
                             <div key={idx} className="p-4 flex items-center hover:bg-gray-50 transition-colors">
                                 <div className="w-16 font-mono text-lg font-medium text-blue-600">{rem.time}</div>
                                 <div className="flex-1 ml-4">
