@@ -3,8 +3,9 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plugins: [react() as any],
-  // @ts-ignore - Vitest types conflict with Vite 7
+  // @ts-expect-error - Vitest types conflict with Vite 7
   test: {
     globals: true,
     environment: 'jsdom',

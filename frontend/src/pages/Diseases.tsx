@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { Plus, Activity, Pencil, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Disease {
     id: string;
@@ -9,6 +10,7 @@ interface Disease {
 }
 
 export function Diseases() {
+    const { t } = useTranslation();
     const [diseases, setDiseases] = useState<Disease[]>([]);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({ name: '', description: '' });
@@ -19,9 +21,9 @@ export function Diseases() {
             const res = await api.get('/diseases');
             setDiseases(res.data);
         } catch {
-            console.error('Failed to fetch diseases');
+            console.error(t('diseases.failed_fetch'));
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -41,12 +43,12 @@ export function Diseases() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this disease?')) return;
+        if (!confirm(t('common.confirm_delete'))) return;
         try {
             await api.delete(`/diseases/${id}`);
             fetchDiseases();
         } catch {
-            alert('Failed to delete disease');
+            alert(t('common.failed_delete'));
         }
     };
 
@@ -61,32 +63,32 @@ export function Diseases() {
             resetForm();
             fetchDiseases();
         } catch {
-            alert(`Failed to ${editingId ? 'update' : 'add'} disease`);
+            alert(editingId ? t('common.failed_update') : t('diseases.failed_add'));
         }
     };
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-gray-900">Diseases</h1>
+                <h1 className="text-3xl font-bold text-gray-900">{t('diseases.title')}</h1>
                 <button
                     onClick={() => { resetForm(); setShowForm(!showForm); }}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center shadow-sm"
                 >
                     <Plus className="w-5 h-5 mr-2" />
-                    {showForm ? 'Close' : 'Add Disease'}
+                    {showForm ? t('common.close') : t('diseases.add_button')}
                 </button>
             </div>
 
             {showForm && (
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h2 className="text-xl font-bold mb-4">{editingId ? 'Edit Disease' : 'Add New Disease'}</h2>
+                    <h2 className="text-xl font-bold mb-4">{editingId ? t('diseases.edit_title') : t('diseases.add_title')}</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <input placeholder="Name" className="w-full p-2 border rounded-lg" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-                        <textarea placeholder="Description" className="w-full p-2 border rounded-lg" rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
+                        <input placeholder={t('diseases.name_placeholder')} className="w-full p-2 border rounded-lg" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
+                        <textarea placeholder={t('diseases.description_placeholder')} className="w-full p-2 border rounded-lg" rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
                         <div className="flex justify-end space-x-2">
-                            <button type="button" onClick={resetForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{editingId ? 'Update' : 'Save'}</button>
+                            <button type="button" onClick={resetForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">{t('common.cancel')}</button>
+                            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{editingId ? t('common.update') : t('common.save')}</button>
                         </div>
                     </form>
                 </div>
@@ -111,7 +113,7 @@ export function Diseases() {
                                 </button>
                             </div>
                         </div>
-                        <p className="text-gray-600">{d.description || 'No description provided.'}</p>
+                        <p className="text-gray-600">{d.description || t('diseases.no_description')}</p>
                     </div>
                 ))}
             </div>

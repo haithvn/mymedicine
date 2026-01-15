@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { Plus, Archive, AlertTriangle, Pencil, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Medicine {
     id: string;
@@ -13,26 +14,27 @@ interface Medicine {
 }
 
 export function Medicines() {
+    const { t } = useTranslation();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({ name: '', manufacturer: '', quantity: 0, unit: 'tablet' });
     const [editingId, setEditingId] = useState<string | null>(null);
 
-    const fetchMedicines = async () => {
+    const fetchMedicines = React.useCallback(async () => {
         try {
             const res = await api.get('/medicines');
             setMedicines(res.data);
         } catch {
-            console.error('Failed to fetch medicines');
+            console.error(t('medicines.failed_fetch'));
         } finally {
             setLoading(false);
         }
-    };
+    }, [t]);
 
     useEffect(() => {
         fetchMedicines();
-    }, []);
+    }, [fetchMedicines]);
 
     const resetForm = () => {
         setFormData({ name: '', manufacturer: '', quantity: 0, unit: 'tablet' });
@@ -52,12 +54,12 @@ export function Medicines() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this medicine?')) return;
+        if (!confirm(t('common.confirm_delete'))) return;
         try {
             await api.delete(`/medicines/${id}`);
             fetchMedicines();
         } catch {
-            alert('Failed to delete medicine');
+            alert(t('common.failed_delete'));
         }
     };
 
@@ -78,36 +80,36 @@ export function Medicines() {
             resetForm();
             fetchMedicines();
         } catch {
-            alert(`Failed to ${editingId ? 'update' : 'add'} medicine`);
+            alert(editingId ? t('common.failed_update') : t('common.failed_save'));
         }
     };
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-gray-900">Medicine Cabinet</h1>
+                <h1 className="text-3xl font-bold text-gray-900">{t('medicines.title')}</h1>
                 <button
                     onClick={() => { resetForm(); setShowForm(!showForm); }}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center shadow-sm transition-colors"
                 >
                     <Plus className="w-5 h-5 mr-2" />
-                    {showForm ? 'Close' : 'Add Medicine'}
+                    {showForm ? t('common.close') : t('medicines.add_button')}
                 </button>
             </div>
 
             {showForm && (
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 animate-in fade-in slide-in-from-top-4">
-                    <h2 className="text-xl font-bold mb-4">{editingId ? 'Edit Medicine' : 'Add New Medicine'}</h2>
+                    <h2 className="text-xl font-bold mb-4">{editingId ? t('medicines.edit_title') : t('medicines.add_title')}</h2>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input placeholder="Name" className="p-2 border rounded-lg" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-                        <input placeholder="Manufacturer" className="p-2 border rounded-lg" value={formData.manufacturer} onChange={e => setFormData({ ...formData, manufacturer: e.target.value })} />
+                        <input placeholder={t('medicines.name_placeholder')} className="p-2 border rounded-lg" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
+                        <input placeholder={t('medicines.manufacturer_placeholder')} className="p-2 border rounded-lg" value={formData.manufacturer} onChange={e => setFormData({ ...formData, manufacturer: e.target.value })} />
                         <div className="flex space-x-2">
-                            <input type="number" placeholder="Qty" className="p-2 border rounded-lg w-24" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })} />
-                            <input placeholder="Unit (tabs, ml)" className="p-2 border rounded-lg flex-1" value={formData.unit} onChange={e => setFormData({ ...formData, unit: e.target.value })} />
+                            <input type="number" placeholder={t('medicines.qty_placeholder')} className="p-2 border rounded-lg w-24" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })} />
+                            <input placeholder={t('medicines.unit_placeholder')} className="p-2 border rounded-lg flex-1" value={formData.unit} onChange={e => setFormData({ ...formData, unit: e.target.value })} />
                         </div>
                         <div className="md:col-span-2 flex justify-end space-x-2">
-                            <button type="button" onClick={resetForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{editingId ? 'Update' : 'Save'} Medicine</button>
+                            <button type="button" onClick={resetForm} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">{t('common.cancel')}</button>
+                            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{editingId ? t('common.update') : t('common.save')} {t('layout.medicines').toLowerCase()}</button>
                         </div>
                     </form>
                 </div>
@@ -123,7 +125,7 @@ export function Medicines() {
                             <div className="flex gap-2">
                                 {med.quantity === 0 && (
                                     <span className="bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full flex items-center h-fit">
-                                        <AlertTriangle className="w-3 h-3 mr-1" /> Out of Stock
+                                        <AlertTriangle className="w-3 h-3 mr-1" /> {t('medicines.out_of_stock')}
                                     </span>
                                 )}
                                 <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
@@ -137,9 +139,9 @@ export function Medicines() {
                             </div>
                         </div>
                         <h3 className="text-lg font-bold text-gray-900 mb-1">{med.name}</h3>
-                        <p className="text-sm text-gray-500 mb-4">{med.manufacturer || 'No Brand'}</p>
+                        <p className="text-sm text-gray-500 mb-4">{med.manufacturer || t('medicines.no_brand')}</p>
                         <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">Stock: <b className="text-gray-900">{med.quantity}</b> {med.unit}</span>
+                            <span className="text-gray-600">{t('medicines.stock')} <b className="text-gray-900">{med.quantity}</b> {med.unit}</span>
                         </div>
                     </div>
                 ))}

@@ -1,3 +1,78 @@
 {
-    "welcome": "Xin chào"
+    "common": {
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "update": "Cập nhật",
+        "create": "Tạo mới",
+        "add": "Thêm",
+        "close": "Đóng",
+        "loading": "Đang tải...",
+        "confirm_delete": "Bạn có chắc chắn muốn xóa không?",
+        "failed_delete": "Xóa thất bại",
+        "failed_update": "Cập nhật thất bại",
+        "failed_save": "Lưu thất bại",
+        "failed_fetch": "Không thể tải dữ liệu"
+    },
+    "layout": {
+        "title": "Tủ Thuốc Của Tôi",
+        "dashboard": "Bảng điều khiển",
+        "medicines": "Tủ thuốc",
+        "diseases": "Bệnh lý",
+        "prescriptions": "Đơn thuốc",
+        "language": "Ngôn ngữ",
+        "welcome": "Xin chào"
+    },
+    "dashboard": {
+        "title": "Bảng điều khiển",
+        "upcoming_reminders": "Nhắc nhở sắp tới",
+        "todays_schedule": "Lịch trình hôm nay",
+        "loading_schedule": "Đang tải lịch trình...",
+        "no_scheduled": "Không có lịch uống thuốc hôm nay.",
+        "pending": "Đang chờ"
+    },
+    "medicines": {
+        "title": "Tủ thuốc",
+        "add_button": "Thêm thuốc",
+        "edit_title": "Sửa thông tin thuốc",
+        "add_title": "Thêm thuốc mới",
+        "name_placeholder": "Tên thuốc",
+        "manufacturer_placeholder": "Nhà sản xuất",
+        "qty_placeholder": "Số lượng",
+        "unit_placeholder": "Đơn vị (viên, ml...)",
+        "out_of_stock": "Hết hàng",
+        "stock": "Kho:",
+        "no_brand": "Không có hãng",
+        "failed_fetch": "Không thể tải danh sách thuốc"
+    },
+    "diseases": {
+        "title": "Bệnh lý",
+        "add_button": "Thêm bệnh lý",
+        "edit_title": "Sửa bệnh lý",
+        "add_title": "Thêm bệnh lý mới",
+        "name_placeholder": "Tên bệnh",
+        "description_placeholder": "Mô tả",
+        "no_description": "Không có mô tả.",
+        "failed_add": "Thêm bệnh lý thất bại",
+        "failed_fetch": "Không thể tải danh sách bệnh lý"
+    },
+    "prescriptions": {
+        "title": "Đơn thuốc",
+        "add_button": "Đơn thuốc mới",
+        "edit_title": "Sửa đơn thuốc",
+        "add_title": "Tạo đơn thuốc",
+        "disease_label": "Bệnh lý",
+        "select_disease": "Chọn bệnh lý",
+        "frequency_label": "Tần suất",
+        "daily": "Hàng ngày",
+        "weekly": "Hàng tuần",
+        "as_needed": "Khi cần thiết",
+        "scheduled_times": "Giờ uống thuốc (HH:MM)",
+        "add_time": "Thêm giờ",
+        "medicines_label": "Danh sách thuốc",
+        "add_medicine": "Thêm thuốc",
+        "select_medicine": "Chọn thuốc",
+        "dosage_placeholder": "Liều lượng (VD: 1 viên)"
+    }
 }

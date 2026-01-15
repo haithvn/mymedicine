@@ -12,10 +12,10 @@ export function Layout() {
     };
 
     const navItems = [
-        { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-        { to: '/medicines', icon: Pill, label: 'Medicine Cabinet' },
-        { to: '/diseases', icon: Activity, label: 'Diseases' },
-        { to: '/prescriptions', icon: CalendarClock, label: 'Prescriptions' },
+        { to: '/', icon: LayoutDashboard, label: t('layout.dashboard') },
+        { to: '/medicines', icon: Pill, label: t('layout.medicines') },
+        { to: '/diseases', icon: Activity, label: t('layout.diseases') },
+        { to: '/prescriptions', icon: CalendarClock, label: t('layout.prescriptions') },
     ];
 
     return (
@@ -24,7 +24,7 @@ export function Layout() {
             <aside className="hidden md:flex w-64 flex-col bg-white border-r border-gray-200">
                 <div className="p-6 flex items-center space-x-2 border-b border-gray-100">
                     <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">M</div>
-                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">My Medicine</span>
+                    <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">{t('layout.title')}</span>
                 </div>
 
                 <div className="px-6 py-4">
@@ -48,7 +48,7 @@ export function Layout() {
 
                 <nav className="flex-1 p-4 space-y-1">
                     <div className="px-4 pb-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                        {t('welcome')}
+                        {t('layout.welcome')}
                     </div>
                     {navItems.map((item) => (
                         <NavLink
@@ -72,7 +72,7 @@ export function Layout() {
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Mobile Header */}
                 <header className="md:hidden flex items-center justify-between p-4 bg-white border-b border-gray-200">
-                    <span className="text-lg font-bold">My Medicine</span>
+                    <span className="text-lg font-bold">{t('layout.title')}</span>
                     <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-gray-600">
                         <Menu className="w-6 h-6" />
                     </button>
@@ -82,7 +82,7 @@ export function Layout() {
                 {isMobileMenuOpen && (
                     <div className="md:hidden absolute top-16 left-0 right-0 bg-white border-b border-gray-200 z-50 shadow-lg p-4 space-y-2">
                         <div className="flex items-center space-x-4 p-2 mb-2 bg-gray-50 rounded-lg">
-                            <span className="text-sm font-medium text-gray-600">Language:</span>
+                            <span className="text-sm font-medium text-gray-600">{t('layout.language')}:</span>
                             <button onClick={() => changeLanguage('en')} className={`text-sm font-bold ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-400'}`}>EN</button>
                             <button onClick={() => changeLanguage('vi')} className={`text-sm font-bold ${i18n.language === 'vi' ? 'text-blue-600' : 'text-gray-400'}`}>VI</button>
                         </div>
