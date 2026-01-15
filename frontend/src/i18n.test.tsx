@@ -1,7 +1,7 @@
 import { render, screen, act } from '@testing-library/react';
 import React from 'react';
 import { useTranslation, I18nextProvider } from 'react-i18next';
-// @ts-ignore
+// @ts-expect-error
 import i18n from './i18n';
 
 const TestComponent = () => {
@@ -21,9 +21,9 @@ describe('i18n integration', () => {
 
     it('renders Vietnamese translation when language changes', async () => {
         await act(async () => {
-            // @ts-ignore
+            // @ts-expect-error
             if (i18n.changeLanguage) {
-                // @ts-ignore
+                // @ts-expect-error
                 await i18n.changeLanguage('vi');
             }
         });

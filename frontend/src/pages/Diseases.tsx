@@ -14,18 +14,18 @@ export function Diseases() {
     const [formData, setFormData] = useState({ name: '', description: '' });
     const [editingId, setEditingId] = useState<string | null>(null);
 
-    const fetchDiseases = async () => {
+    const fetchDiseases = React.useCallback(async () => {
         try {
             const res = await api.get('/diseases');
             setDiseases(res.data);
-        } catch (e) {
-            console.error(e);
+        } catch {
+            console.error('Failed to fetch diseases');
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchDiseases();
-    }, []);
+    }, [fetchDiseases]);
 
     const resetForm = () => {
         setFormData({ name: '', description: '' });
@@ -44,7 +44,7 @@ export function Diseases() {
         try {
             await api.delete(`/diseases/${id}`);
             fetchDiseases();
-        } catch (e) {
+        } catch {
             alert('Failed to delete disease');
         }
     };
@@ -59,7 +59,7 @@ export function Diseases() {
             }
             resetForm();
             fetchDiseases();
-        } catch (e) {
+        } catch {
             alert(`Failed to ${editingId ? 'update' : 'add'} disease`);
         }
     };

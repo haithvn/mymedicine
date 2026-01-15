@@ -28,7 +28,7 @@ export function Prescriptions() {
         medicines: [{ medicineId: '', dosage: '' }]
     });
 
-    const fetchData = async () => {
+    const fetchData = React.useCallback(async () => {
         try {
             const [pRes, dRes, mRes] = await Promise.all([
                 api.get('/prescriptions'),
@@ -38,14 +38,14 @@ export function Prescriptions() {
             setPrescriptions(pRes.data);
             setDiseases(dRes.data);
             setMedicines(mRes.data);
-        } catch (e) {
-            console.error(e);
+        } catch {
+            console.error('Failed to fetch data');
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [fetchData]);
 
     const resetForm = () => {
         setFormData({
@@ -77,7 +77,7 @@ export function Prescriptions() {
         try {
             await api.delete(`/prescriptions/${id}`);
             fetchData();
-        } catch (e) {
+        } catch {
             alert('Failed to delete prescription');
         }
     };
@@ -108,7 +108,7 @@ export function Prescriptions() {
             }
             resetForm();
             fetchData();
-        } catch (e) {
+        } catch {
             alert(`Failed to ${editingId ? 'update' : 'save'} prescription`);
         }
     };

@@ -23,8 +23,8 @@ export function Medicines() {
         try {
             const res = await api.get('/medicines');
             setMedicines(res.data);
-        } catch (e) {
-            console.error(e);
+        } catch {
+            console.error('Failed to fetch medicines');
         } finally {
             setLoading(false);
         }
@@ -56,7 +56,7 @@ export function Medicines() {
         try {
             await api.delete(`/medicines/${id}`);
             fetchMedicines();
-        } catch (e) {
+        } catch {
             alert('Failed to delete medicine');
         }
     };
@@ -77,7 +77,7 @@ export function Medicines() {
 
             resetForm();
             fetchMedicines();
-        } catch (e) {
+        } catch {
             alert(`Failed to ${editingId ? 'update' : 'add'} medicine`);
         }
     };
