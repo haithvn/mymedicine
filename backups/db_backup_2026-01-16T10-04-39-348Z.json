@@ -1,0 +1,238 @@
+{
+  "users": [
+    {
+      "id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Demo User",
+      "email": "demo@example.com",
+      "created_at": "2026-01-14T03:45:37.524Z"
+    }
+  ],
+  "diseases": [
+    {
+      "id": "90cd50dd-7656-47dd-9757-ac40c7211ddf",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "gout",
+      "description": "benh gout",
+      "created_at": "2026-01-14T19:44:55.718Z"
+    },
+    {
+      "id": "def07d9f-e0a2-4876-ad0f-244057051eda",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Cảm cúm",
+      "description": "Cảm cúm thông thường",
+      "created_at": "2026-01-14T23:46:53.909Z"
+    },
+    {
+      "id": "3127573f-a0bb-4036-8837-f03b67d1f7ab",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Nhiễm trùng",
+      "description": "Nhiễm trùng vi khuẩn",
+      "created_at": "2026-01-14T23:46:54.621Z"
+    },
+    {
+      "id": "e942fea5-572c-4a4b-a0aa-0c1ed2a3c06f",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Đau đầu",
+      "description": "Đau nửa đầu hoặc căng thẳng",
+      "created_at": "2026-01-14T23:46:55.334Z"
+    },
+    {
+      "id": "8c87da90-f9b5-4ea2-b438-9180d933bcb5",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Dị ứng",
+      "description": "Dị ứng thời tiết",
+      "created_at": "2026-01-14T23:46:56.054Z"
+    }
+  ],
+  "medicines": [
+    {
+      "id": "6dc22f9d-6766-44d2-a2b0-09ccacffc36f",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "dfsd",
+      "manufacturer": "sdfds",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 1,
+      "unit": "tablet",
+      "status": "available",
+      "created_at": "2026-01-14T03:48:40.532Z"
+    },
+    {
+      "id": "92c8784d-794e-4d28-b159-bcae021a6296",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Viên nén Paracetamol Stada 500mg điều trị các cơn đau đầu, đau thần kinh, đau răng (10 vỉ x 10 viên)",
+      "manufacturer": "Vietnam",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 3,
+      "unit": "tablet",
+      "status": "available",
+      "created_at": "2026-01-14T19:44:37.234Z"
+    },
+    {
+      "id": "e30312b5-84a1-4bdc-b617-321b34123522",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Paracetamol",
+      "manufacturer": "GSK",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 20,
+      "unit": "tablet",
+      "status": "available",
+      "created_at": "2026-01-14T23:46:48.517Z"
+    },
+    {
+      "id": "88a6fd1f-3bce-4a38-b979-b637973edf34",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Amoxicillin",
+      "manufacturer": "Abbott",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 12,
+      "unit": "capsule",
+      "status": "available",
+      "created_at": "2026-01-14T23:46:49.239Z"
+    },
+    {
+      "id": "35f0f213-32de-4558-9ca0-5ea6fd0cb184",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Vitamin C",
+      "manufacturer": "DHG",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 30,
+      "unit": "effervescent",
+      "status": "available",
+      "created_at": "2026-01-14T23:46:49.953Z"
+    },
+    {
+      "id": "ad0364b8-a611-4f65-99cb-1b89a0108fcc",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Ibuprofen",
+      "manufacturer": "Bayer",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 0,
+      "unit": "tablet",
+      "status": "out_of_stock",
+      "created_at": "2026-01-14T23:46:50.683Z"
+    },
+    {
+      "id": "d6756627-bc1b-4157-aa88-8467f663f265",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Augmentin",
+      "manufacturer": "GSK",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 5,
+      "unit": "tablet",
+      "status": "available",
+      "created_at": "2026-01-14T23:46:51.398Z"
+    },
+    {
+      "id": "e4a993cb-d7ea-4be7-b5fb-431b1c50e776",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Panadol",
+      "manufacturer": "GSK",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 15,
+      "unit": "tablet",
+      "status": "available",
+      "created_at": "2026-01-14T23:46:52.117Z"
+    },
+    {
+      "id": "1181f188-f191-4a24-93da-eb876dd20e77",
+      "user_id": "91889723-6e13-483d-909e-e976f1825405",
+      "name": "Decolgen",
+      "manufacturer": "United Pharma",
+      "active_ingredients": null,
+      "price": null,
+      "quantity": 8,
+      "unit": "tablet",
+      "status": "available",
+      "created_at": "2026-01-14T23:46:52.828Z"
+    }
+  ],
+  "prescriptions": [
+    {
+      "id": "e66438a3-85c3-43be-b710-6b2f947911fd",
+      "disease_id": "90cd50dd-7656-47dd-9757-ac40c7211ddf",
+      "frequency": "Daily",
+      "scheduled_times": [
+        "08:00"
+      ],
+      "start_date": null,
+      "end_date": null,
+      "created_at": "2026-01-14T19:45:55.358Z"
+    },
+    {
+      "id": "461c536a-a77c-45c6-9a19-a11e3b37b149",
+      "disease_id": "def07d9f-e0a2-4876-ad0f-244057051eda",
+      "frequency": "Daily",
+      "scheduled_times": [
+        "08:00",
+        "20:00"
+      ],
+      "start_date": null,
+      "end_date": null,
+      "created_at": "2026-01-14T23:46:56.831Z"
+    },
+    {
+      "id": "5f70163b-d64b-4061-8710-fbc9bfa95f63",
+      "disease_id": "3127573f-a0bb-4036-8837-f03b67d1f7ab",
+      "frequency": "Daily",
+      "scheduled_times": [
+        "12:00"
+      ],
+      "start_date": null,
+      "end_date": null,
+      "created_at": "2026-01-14T23:46:57.990Z"
+    },
+    {
+      "id": "34136ecc-1c2d-4ca3-b6ea-51411e6f855d",
+      "disease_id": "e942fea5-572c-4a4b-a0aa-0c1ed2a3c06f",
+      "frequency": "As Needed",
+      "scheduled_times": [
+        "09:00",
+        "15:00",
+        "21:00"
+      ],
+      "start_date": null,
+      "end_date": null,
+      "created_at": "2026-01-14T23:46:59.146Z"
+    }
+  ],
+  "prescription_medicines": [
+    {
+      "id": "9ad4210b-3fc1-48d0-a9f9-0fd04b24e80f",
+      "prescription_id": "e66438a3-85c3-43be-b710-6b2f947911fd",
+      "medicine_id": "92c8784d-794e-4d28-b159-bcae021a6296",
+      "dosage": "1"
+    },
+    {
+      "id": "becfec5e-ffe8-4e93-bb62-1b27ad9b124c",
+      "prescription_id": "461c536a-a77c-45c6-9a19-a11e3b37b149",
+      "medicine_id": "e30312b5-84a1-4bdc-b617-321b34123522",
+      "dosage": "1 viên"
+    },
+    {
+      "id": "1adc78e7-baba-4c50-9412-eeaace29ae72",
+      "prescription_id": "461c536a-a77c-45c6-9a19-a11e3b37b149",
+      "medicine_id": "35f0f213-32de-4558-9ca0-5ea6fd0cb184",
+      "dosage": "1 viên sủi"
+    },
+    {
+      "id": "3f92665c-a108-41f1-9ec4-81a252d75c18",
+      "prescription_id": "5f70163b-d64b-4061-8710-fbc9bfa95f63",
+      "medicine_id": "88a6fd1f-3bce-4a38-b979-b637973edf34",
+      "dosage": "1 viên"
+    },
+    {
+      "id": "53d9f3d6-671e-4ff3-ae58-f496c4379d6b",
+      "prescription_id": "34136ecc-1c2d-4ca3-b6ea-51411e6f855d",
+      "medicine_id": "ad0364b8-a611-4f65-99cb-1b89a0108fcc",
+      "dosage": "1 viên"
+    }
+  ]
+}
