@@ -13,7 +13,8 @@
         "failed_delete": "Failed to delete",
         "failed_update": "Failed to update",
         "failed_save": "Failed to save",
-        "failed_fetch": "Failed to fetch data"
+        "failed_fetch": "Failed to fetch data",
+        "fill_required": "Please fill in all required fields"
     },
     "layout": {
         "title": "My Medicine",

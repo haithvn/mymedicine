@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { Plus, Archive, AlertTriangle, Pencil, Trash2 } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { api } from '../services/api';
@@ -18,6 +18,13 @@ export default function Medicines() {
     const { t } = useTranslation();
     const [medicines, setMedicines] = useState<Medicine[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        manufacturer: '',
+        quantity: '',
+        unit: ''
+    });
 
     const fetchMedicines = useCallback(async () => {
         try {
@@ -56,6 +63,25 @@ export default function Medicines() {
         );
     };
 
+    const handleAdd = async () => {
+        if (!formData.name || !formData.quantity || !formData.unit) {
+            Alert.alert(t('common.failed_save'), t('common.fill_required'));
+            return;
+        }
+
+        try {
+            await api.post('/medicines', {
+                ...formData,
+                quantity: parseInt(formData.quantity)
+            });
+            setIsModalVisible(false);
+            setFormData({ name: '', manufacturer: '', quantity: '', unit: '' });
+            fetchMedicines();
+        } catch {
+            Alert.alert(t('common.failed_save'));
+        }
+    };
+
     if (loading) {
         return (
             <View className="flex-1 justify-center items-center bg-gray-50">
@@ -69,7 +95,10 @@ export default function Medicines() {
             <ScrollView className="flex-1 p-6">
                 <View className="flex-row justify-between items-center mb-6">
                     <Text className="text-3xl font-bold text-gray-900">{t('medicines.title')}</Text>
-                    <TouchableOpacity className="bg-blue-600 p-3 rounded-full shadow-lg">
+                    <TouchableOpacity
+                        onPress={() => setIsModalVisible(true)}
+                        className="bg-blue-600 p-3 rounded-full shadow-lg"
+                    >
                         <Plus size={24} color="white" />
                     </TouchableOpacity>
                 </View>
@@ -104,6 +133,78 @@ export default function Medicines() {
                     ))}
                 </View>
             </ScrollView>
+
+            <Modal
+                visible={isModalVisible}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => setIsModalVisible(false)}
+            >
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    className="flex-1 justify-end bg-black/50"
+                >
+                    <View className="bg-white rounded-t-[40px] p-6 pb-10">
+                        <View className="flex-row justify-between items-center mb-6">
+                            <Text className="text-2xl font-bold text-gray-900">{t('medicines.add_title')}</Text>
+                            <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+                                <Text className="text-blue-600 font-medium">{t('common.close')}</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View className="gap-4">
+                            <View>
+                                <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('medicines.name_placeholder')}</Text>
+                                <TextInput
+                                    className="bg-gray-50 p-4 rounded-2xl border border-gray-100"
+                                    placeholder={t('medicines.name_placeholder')}
+                                    value={formData.name}
+                                    onChangeText={(text) => setFormData({ ...formData, name: text })}
+                                />
+                            </View>
+
+                            <View>
+                                <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('medicines.manufacturer_placeholder')}</Text>
+                                <TextInput
+                                    className="bg-gray-50 p-4 rounded-2xl border border-gray-100"
+                                    placeholder={t('medicines.manufacturer_placeholder')}
+                                    value={formData.manufacturer}
+                                    onChangeText={(text) => setFormData({ ...formData, manufacturer: text })}
+                                />
+                            </View>
+
+                            <View className="flex-row gap-4">
+                                <View className="flex-1">
+                                    <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('medicines.qty_placeholder')}</Text>
+                                    <TextInput
+                                        className="bg-gray-50 p-4 rounded-2xl border border-gray-100"
+                                        placeholder="0"
+                                        keyboardType="numeric"
+                                        value={formData.quantity}
+                                        onChangeText={(text) => setFormData({ ...formData, quantity: text })}
+                                    />
+                                </View>
+                                <View className="flex-1">
+                                    <Text className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('medicines.unit_placeholder')}</Text>
+                                    <TextInput
+                                        className="bg-gray-50 p-4 rounded-2xl border border-gray-100"
+                                        placeholder="viên"
+                                        value={formData.unit}
+                                        onChangeText={(text) => setFormData({ ...formData, unit: text })}
+                                    />
+                                </View>
+                            </View>
+
+                            <TouchableOpacity
+                                onPress={handleAdd}
+                                className="bg-blue-600 p-5 rounded-2xl shadow-lg mt-4"
+                            >
+                                <Text className="text-white text-center font-bold text-lg">{t('common.add')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </KeyboardAvoidingView>
+            </Modal>
         </View>
     );
 }

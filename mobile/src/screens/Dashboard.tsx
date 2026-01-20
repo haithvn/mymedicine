@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, useWindowDimensions, ActivityIndicator } from 'react-native';
 import { Pill, CheckCircle, Clock } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { api } from '../services/api';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 
-const screenWidth = Dimensions.get('window').width;
+
 
 interface Reminder {
     time: string;
@@ -39,6 +39,8 @@ export default function Dashboard() {
     const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
     const [loading, setLoading] = useState(true);
     const [now, setNow] = useState(new Date());
+    const { width: windowWidth } = useWindowDimensions();
+    const chartWidth = windowWidth - 48; // Account for p-6 (24*2)
 
     useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 1000);
@@ -181,15 +183,13 @@ export default function Dashboard() {
                 </View>
 
                 {/* Stock Chart */}
-                {stockData.labels.length > 0 && (
-                    <View className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
-                        <View className="flex-row justify-between items-center mb-4">
-                            <Text className="text-lg font-semibold">{t('dashboard.stock_status')}</Text>
-                        </View>
+                <View className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
+                    <Text className="text-lg font-semibold mb-4">{t('dashboard.stock_status')}</Text>
+                    {stockData.labels.length > 0 ? (
                         <BarChart
                             data={stockData}
-                            width={screenWidth - 80}
-                            height={220}
+                            width={chartWidth - 32} // Use more of the available container width
+                            height={280} // More height for labels
                             yAxisLabel=""
                             yAxisSuffix=""
                             chartConfig={{
@@ -199,31 +199,43 @@ export default function Dashboard() {
                                 decimalPlaces: 0,
                                 color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`,
                                 labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
-                                style: { borderRadius: 16 },
-                                barPercentage: 0.6,
+                                style: {
+                                    borderRadius: 16,
+                                },
+                                barPercentage: 0.5,
                             }}
-                            verticalLabelRotation={30}
+                            verticalLabelRotation={45}
                             fromZero
                         />
-                    </View>
-                )}
+                    ) : (
+                        <View className="h-[220px] items-center justify-center border border-dashed border-gray-200 rounded-2xl">
+                            <Text className="text-gray-400">{t('common.no_data')}</Text>
+                        </View>
+                    )}
+                </View>
 
                 {/* Disease Distribution */}
                 <View className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
                     <Text className="text-lg font-semibold mb-4">{t('dashboard.medication_by_disease')}</Text>
-                    <PieChart
-                        data={diseaseData}
-                        width={screenWidth - 80}
-                        height={200}
-                        chartConfig={{
-                            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                        }}
-                        accessor={"population"}
-                        backgroundColor={"transparent"}
-                        paddingLeft={"15"}
-                        center={[10, 0]}
-                        absolute
-                    />
+                    {diseaseData.length > 0 ? (
+                        <PieChart
+                            data={diseaseData}
+                            width={chartWidth - 48}
+                            height={200}
+                            chartConfig={{
+                                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                            }}
+                            accessor={"population"}
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"} // Increased padding to avoid left-side cut-off
+                            center={[10, 0]} // Slightly shift right
+                            absolute
+                        />
+                    ) : (
+                        <View className="h-[200px] items-center justify-center border border-dashed border-gray-200 rounded-2xl">
+                            <Text className="text-gray-400">{t('common.no_data')}</Text>
+                        </View>
+                    )}
                 </View>
             </View>
         </ScrollView>

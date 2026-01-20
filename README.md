@@ -9,6 +9,8 @@ A full-stack medicine management application built with Next.js, React, and Post
 - 📋 **Prescriptions**: Create and manage prescriptions with multiple medicines
 - ✏️ **Edit & Delete**: Full edit and delete functionality for all entities
 - 🔄 **Real-time Updates**: Immediate UI updates after any operation
+- 📱 **Mobile App**: React Native (Expo) mobile application with NativeWind styling
+- 🌐 **Multi-language**: Support for English and Vietnamese
 
 ## 🚀 Live Demo
 
@@ -29,6 +31,13 @@ A full-stack medicine management application built with Next.js, React, and Post
 - **Icons**: Lucide React
 - **HTTP Client**: Axios
 
+### Mobile
+- **Framework**: React Native with Expo SDK 52
+- **Styling**: NativeWind (Tailwind CSS for React Native)
+- **Navigation**: React Navigation (Bottom Tabs)
+- **Charts**: react-native-chart-kit
+- **Icons**: Lucide React Native
+
 ## Project Structure
 
 ```
@@ -41,11 +50,21 @@ mymedicine/
 │   │   └── lib/      # Database connection
 │   └── package.json
 │
-└── frontend/         # React frontend application
+├── frontend/         # React frontend application
+│   ├── src/
+│   │   ├── components/  # Reusable components
+│   │   ├── pages/       # Page components
+│   │   └── services/    # API service layer
+│   └── package.json
+│
+└── mobile/           # React Native (Expo) mobile app
     ├── src/
-    │   ├── components/  # Reusable components
-    │   ├── pages/       # Page components
-    │   └── services/    # API service layer
+    │   ├── screens/     # Screen components
+    │   ├── services/    # API service layer
+    │   ├── locales/     # i18n translations (en, vi)
+    │   └── global.css   # NativeWind styles
+    ├── App.tsx          # Main entry with navigation
+    ├── patches/         # Metro config patches for Windows
     └── package.json
 ```
 
@@ -88,9 +107,25 @@ mymedicine/
    npm run dev
    ```
 
-4. **Access the application**
+4. **Setup Mobile App (Optional)**
+   ```bash
+   cd mobile
+   npm install
+   
+   # Start Expo dev server
+   npm start
+   ```
+   
+   After starting, you can:
+   - Press `w` to open in web browser
+   - Press `a` to open in Android emulator
+   - Press `i` to open in iOS simulator (macOS only)
+   - Scan QR code with Expo Go app on your phone
+
+5. **Access the application**
    - Frontend: http://localhost:5173
    - Backend API: http://localhost:3000/api
+   - Mobile (Web): http://localhost:8081
 
 ## API Endpoints
 
@@ -150,6 +185,27 @@ npm run dev          # Start dev server
 npm run build        # Build for production
 npm run preview      # Preview production build
 ```
+
+### Mobile Development
+```bash
+cd mobile
+npm start            # Start Expo dev server
+npm run web          # Start web version directly
+```
+
+**Building APK for Android:**
+```bash
+# Install EAS CLI globally
+npm install -g eas-cli
+
+# Login to Expo
+eas login
+
+# Build APK (preview profile)
+eas build -p android --profile preview
+```
+
+**Windows Users:** The repo includes a `patch-package` fix for Metro bundler compatibility. The patch is automatically applied after `npm install`.
 
 ## Deployment to Vercel
 
