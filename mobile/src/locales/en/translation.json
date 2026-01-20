@@ -40,7 +40,10 @@
         "adherence_progress": "Daily Adherence Progress",
         "summary": "Health Insights & Statistics",
         "prescriptions_added": "Prescriptions Added",
-        "low_stock_warning": "Attention: Some medications need restocking soon."
+        "low_stock_warning": "Attention: Some medications need restocking soon.",
+        "install_app_title": "Install the App",
+        "install_app_desc": "Get a better experience with our Android app",
+        "download_apk": "Download APK"
     },
     "medicines": {
         "title": "Medicines",

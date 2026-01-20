@@ -40,7 +40,10 @@
         "adherence_progress": "Tiến độ hoàn thành trong ngày",
         "summary": "Phân tích sức khỏe & Thống kê",
         "prescriptions_added": "Tổng số đơn thuốc",
-        "low_stock_warning": "Chú ý: Các loại thuốc cần bổ sung sớm."
+        "low_stock_warning": "Chú ý: Các loại thuốc cần bổ sung sớm.",
+        "install_app_title": "Cài đặt ứng dụng",
+        "install_app_desc": "Trải nghiệm tốt hơn với ứng dụng Android",
+        "download_apk": "Tải APK ngay"
     },
     "medicines": {
         "title": "Tủ thuốc",

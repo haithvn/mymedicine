@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, useWindowDimensions, ActivityIndicator } from 'react-native';
-import { Pill, CheckCircle, Clock } from 'lucide-react-native';
+import { View, Text, ScrollView, TouchableOpacity, useWindowDimensions, ActivityIndicator, Platform, Linking } from 'react-native';
+import { Pill, CheckCircle, Clock, Download, X } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { api } from '../services/api';
@@ -32,6 +32,9 @@ interface Prescription {
 
 const COLORS = ['#3B82F6', '#6366F1', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981'];
 
+// TODO: Replace with Google Play Store link in production
+const APK_DOWNLOAD_URL = 'https://expo.dev/artifacts/eas/mp9RRfCrpxNw87uCx93eCd.apk';
+
 export default function Dashboard() {
     const { t, i18n } = useTranslation();
     const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -39,6 +42,7 @@ export default function Dashboard() {
     const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
     const [loading, setLoading] = useState(true);
     const [now, setNow] = useState(new Date());
+    const [showInstallBanner, setShowInstallBanner] = useState(Platform.OS === 'web');
     const { width: windowWidth } = useWindowDimensions();
     const chartWidth = windowWidth - 48; // Account for p-6 (24*2)
 
@@ -118,6 +122,33 @@ export default function Dashboard() {
                     <Text className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</Text>
                     <Text className="text-gray-500 mt-1">{t('dashboard.summary')}</Text>
                 </View>
+
+                {/* Install App Banner - Only on mobile web */}
+                {showInstallBanner && (
+                    <View className="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-3xl mb-6 shadow-lg">
+                        <TouchableOpacity
+                            onPress={() => setShowInstallBanner(false)}
+                            className="absolute top-3 right-3 z-10"
+                        >
+                            <X size={20} color="white" />
+                        </TouchableOpacity>
+                        <View className="flex-row items-center mb-3">
+                            <View className="bg-white/20 p-2 rounded-xl mr-3">
+                                <Download size={24} color="white" />
+                            </View>
+                            <View className="flex-1">
+                                <Text className="text-white font-bold text-lg">{t('dashboard.install_app_title')}</Text>
+                                <Text className="text-white/80 text-sm">{t('dashboard.install_app_desc')}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL(APK_DOWNLOAD_URL)}
+                            className="bg-white py-3 rounded-2xl"
+                        >
+                            <Text className="text-blue-600 font-bold text-center">{t('dashboard.download_apk')}</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
                 {/* Clock Card */}
                 <View className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex-row items-center mb-8">
