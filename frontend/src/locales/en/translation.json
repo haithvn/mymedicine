@@ -88,5 +88,11 @@
         "title": "Get our Mobile App",
         "description": "For the best experience, download our official Android app.",
         "download_button": "Download APK Now"
+    },
+    "api_error": {
+        "title": "Connection Interrupted",
+        "message": "Unable to connect to server. Please check your network connection or try again later.",
+        "retry": "Retry",
+        "auto_retry": "Auto-retry in {{seconds}}s"
     }
 }

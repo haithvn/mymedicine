@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { LayoutDashboard, Pill, Activity, CalendarClock, Menu, Languages } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ApiStatusBanner } from '../ApiStatusBanner';
 
 export function Layout() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -102,6 +103,7 @@ export function Layout() {
 
                 <main className="flex-1 overflow-auto p-4 md:p-8">
                     <div className="max-w-7xl mx-auto">
+                        <ApiStatusBanner />
                         <Outlet />
                     </div>
                 </main>

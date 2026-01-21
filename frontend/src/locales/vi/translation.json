@@ -88,5 +88,11 @@
         "title": "Tải ứng dụng di động",
         "description": "Trải nghiệm tốt hơn với ứng dụng Android chính thức.",
         "download_button": "Tải APK ngay"
+    },
+    "api_error": {
+        "title": "Gián đoạn kết nối",
+        "message": "Không thể kết nối với máy chủ. Vui lòng kiểm tra kết nối mạng hoặc thử lại sau.",
+        "retry": "Thử lại",
+        "auto_retry": "Tự động thử lại sau {{seconds}}s"
     }
 }
