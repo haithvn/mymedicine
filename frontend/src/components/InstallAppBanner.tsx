@@ -1,3 +1,4 @@
+// InstallAppBanner - Redesigned to match mobile app style (2026-01-21)
 import { useState, useEffect } from 'react';
 import { Download, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
