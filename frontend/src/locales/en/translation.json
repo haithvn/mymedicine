@@ -83,5 +83,10 @@
         "add_medicine": "Add Medicine",
         "select_medicine": "Select Medicine",
         "dosage_placeholder": "Dosage (e.g. 1 tab)"
+    },
+    "install_app": {
+        "title": "Get our Mobile App",
+        "description": "For the best experience, download our official Android app.",
+        "download_button": "Download APK Now"
     }
 }

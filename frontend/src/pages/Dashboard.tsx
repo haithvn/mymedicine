@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { Pill, CheckCircle, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { InstallAppBanner } from '../components/InstallAppBanner';
 import { format } from 'date-fns';
 import { vi, enUS } from 'date-fns/locale';
 import {
@@ -129,6 +130,7 @@ export function Dashboard() {
 
     return (
         <div className="space-y-8 pb-10">
+            <InstallAppBanner />
             {/* Header & Clock */}
             <div className="flex flex-col md:row items-start md:items-center justify-between gap-4">
                 <div>

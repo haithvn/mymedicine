@@ -83,5 +83,10 @@
         "add_medicine": "Thêm thuốc",
         "select_medicine": "Chọn thuốc",
         "dosage_placeholder": "Liều lượng (VD: 1 viên)"
+    },
+    "install_app": {
+        "title": "Tải ứng dụng di động",
+        "description": "Trải nghiệm tốt hơn với ứng dụng Android chính thức.",
+        "download_button": "Tải APK ngay"
     }
 }
