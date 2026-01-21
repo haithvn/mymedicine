@@ -3,6 +3,7 @@ import { LayoutDashboard, Pill, Activity, CalendarClock, Menu, Languages } from 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApiStatusBanner } from '../ApiStatusBanner';
+import { VoiceAssistant } from '../VoiceAssistant';
 
 export function Layout() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -107,6 +108,7 @@ export function Layout() {
                         <Outlet />
                     </div>
                 </main>
+                <VoiceAssistant />
             </div>
         </div>
     );
