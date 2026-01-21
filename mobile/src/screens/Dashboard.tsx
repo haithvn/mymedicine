@@ -33,7 +33,7 @@ interface Prescription {
 const COLORS = ['#3B82F6', '#6366F1', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981'];
 
 // TODO: Replace with Google Play Store link in production
-const APK_DOWNLOAD_URL = 'https://expo.dev/artifacts/eas/mp9RRfCrpxNw87uCx93eCd.apk';
+const APK_DOWNLOAD_URL = 'https://expo.dev/artifacts/eas/nzqs47ULbAQN7Ghmk9xjuG.apk';
 
 export default function Dashboard() {
     const { t, i18n } = useTranslation();
@@ -74,15 +74,29 @@ export default function Dashboard() {
         return () => clearInterval(interval);
     }, []);
 
+    const getIntakePeakHours = () => {
+        const hours = Array.from({ length: 24 }, (_, i) => ({ hour: i, count: 0 }));
+        prescriptions.forEach(p => {
+            p.scheduledTimes?.forEach(time => {
+                const h = parseInt(time.split(':')[0]);
+                hours[h].count++;
+            });
+        });
+        const filtered = hours.filter(h => h.count > 0);
+        return {
+            labels: filtered.map(h => `${h.hour}h`),
+            datasets: [{ data: filtered.map(h => h.count) }]
+        };
+    };
+
     const getLowStockMedicines = () => {
-        const data = medicines
+        const filtered = medicines
             .filter(m => m.quantity < 5)
             .sort((a, b) => a.quantity - b.quantity)
             .slice(0, 5);
-
         return {
-            labels: data.map(m => m.name),
-            datasets: [{ data: data.map(m => m.quantity) }]
+            labels: filtered.map(m => m.name),
+            datasets: [{ data: filtered.map(m => m.quantity) }]
         };
     };
 
@@ -93,12 +107,20 @@ export default function Dashboard() {
             counts[diseaseName] = (counts[diseaseName] || 0) + 1;
         });
         return Object.entries(counts).map(([name, value], index) => ({
-            name,
+            name: name,
             population: value,
             color: COLORS[index % COLORS.length],
             legendFontColor: "#7F7F7F",
-            legendFontSize: 12
+            legendFontSize: 11
         }));
+    };
+
+    const getDailyAdherence = () => {
+        const currentTimeStr = format(now, 'HH:mm');
+        const total = reminders.length;
+        const taken = reminders.filter(r => r.time <= currentTimeStr).length;
+        const percent = total > 0 ? Math.round((taken / total) * 100) : 0;
+        return percent;
     };
 
     if (loading) {
@@ -112,6 +134,8 @@ export default function Dashboard() {
 
     const stockData = getLowStockMedicines();
     const diseaseData = getMedicationByDisease();
+    const peakHoursData = getIntakePeakHours();
+    const adherencePercent = getDailyAdherence();
     const upcomingReminders = reminders.filter(r => r.time > format(now, 'HH:mm'));
 
     return (
@@ -162,20 +186,30 @@ export default function Dashboard() {
                     </View>
                 </View>
 
-                {/* Stats Row */}
-                <View className="flex-row justify-between mb-8">
-                    <View className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex-1 mr-4 flex-row items-center">
-                        <View className="p-2 bg-blue-100 rounded-full mr-3"><Pill size={20} color="#2563EB" /></View>
-                        <View>
-                            <Text className="text-[10px] text-gray-500">{t('dashboard.upcoming_reminders')}</Text>
-                            <Text className="text-lg font-bold text-gray-900">{upcomingReminders.length}</Text>
+                {/* Stats & Adherence Row */}
+                <View className="flex-row mb-8">
+                    <View className="flex-1 mr-4">
+                        <View className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-4 flex-row items-center">
+                            <View className="p-2 bg-blue-100 rounded-full mr-3"><Pill size={20} color="#2563EB" /></View>
+                            <View>
+                                <Text className="text-[10px] text-gray-500">{t('dashboard.upcoming_reminders')}</Text>
+                                <Text className="text-lg font-bold text-gray-900">{upcomingReminders.length}</Text>
+                            </View>
+                        </View>
+                        <View className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex-row items-center">
+                            <View className="p-2 bg-indigo-100 rounded-full mr-3"><CheckCircle size={20} color="#4F46E5" /></View>
+                            <View>
+                                <Text className="text-[10px] text-gray-500">{t('dashboard.prescriptions_added')}</Text>
+                                <Text className="text-lg font-bold text-gray-900">{prescriptions.length}</Text>
+                            </View>
                         </View>
                     </View>
-                    <View className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex-1 flex-row items-center">
-                        <View className="p-2 bg-indigo-100 rounded-full mr-3"><CheckCircle size={20} color="#4F46E5" /></View>
-                        <View>
-                            <Text className="text-[10px] text-gray-500">{t('dashboard.prescriptions_added')}</Text>
-                            <Text className="text-lg font-bold text-gray-900">{prescriptions.length}</Text>
+
+                    <View className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex-1 items-center justify-center">
+                        <Text className="text-[10px] font-bold text-gray-500 uppercase mb-2">{t('dashboard.adherence_progress')}</Text>
+                        <View className="items-center justify-center">
+                            <Text className="text-3xl font-bold text-green-600">{adherencePercent}%</Text>
+                            <Text className="text-[10px] text-gray-400 font-bold uppercase">{t('dashboard.taken')}</Text>
                         </View>
                     </View>
                 </View>
@@ -219,8 +253,8 @@ export default function Dashboard() {
                     {stockData.labels.length > 0 ? (
                         <BarChart
                             data={stockData}
-                            width={chartWidth - 32} // Use more of the available container width
-                            height={280} // More height for labels
+                            width={chartWidth - 32}
+                            height={220}
                             yAxisLabel=""
                             yAxisSuffix=""
                             chartConfig={{
@@ -230,16 +264,43 @@ export default function Dashboard() {
                                 decimalPlaces: 0,
                                 color: (opacity = 1) => `rgba(239, 68, 68, ${opacity})`,
                                 labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
-                                style: {
-                                    borderRadius: 16,
-                                },
+                                style: { borderRadius: 16 },
                                 barPercentage: 0.5,
                             }}
-                            verticalLabelRotation={45}
+                            verticalLabelRotation={30}
                             fromZero
                         />
                     ) : (
-                        <View className="h-[220px] items-center justify-center border border-dashed border-gray-200 rounded-2xl">
+                        <View className="h-[200px] items-center justify-center border border-dashed border-gray-200 rounded-2xl">
+                            <Text className="text-gray-400">{t('common.no_data')}</Text>
+                        </View>
+                    )}
+                </View>
+
+                {/* Peak Hours Chart */}
+                <View className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
+                    <Text className="text-lg font-semibold mb-4">{t('dashboard.peak_hours')}</Text>
+                    {peakHoursData.labels.length > 0 ? (
+                        <BarChart
+                            data={peakHoursData}
+                            width={chartWidth - 32}
+                            height={220}
+                            yAxisLabel=""
+                            yAxisSuffix=""
+                            chartConfig={{
+                                backgroundColor: "#ffffff",
+                                backgroundGradientFrom: "#ffffff",
+                                backgroundGradientTo: "#ffffff",
+                                decimalPlaces: 0,
+                                color: (opacity = 1) => `rgba(99, 102, 241, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(107, 114, 128, ${opacity})`,
+                                style: { borderRadius: 16 },
+                                barPercentage: 0.6,
+                            }}
+                            fromZero
+                        />
+                    ) : (
+                        <View className="h-[200px] items-center justify-center border border-dashed border-gray-200 rounded-2xl">
                             <Text className="text-gray-400">{t('common.no_data')}</Text>
                         </View>
                     )}
@@ -258,8 +319,8 @@ export default function Dashboard() {
                             }}
                             accessor={"population"}
                             backgroundColor={"transparent"}
-                            paddingLeft={"15"} // Increased padding to avoid left-side cut-off
-                            center={[10, 0]} // Slightly shift right
+                            paddingLeft={"15"}
+                            center={[10, 0]}
                             absolute
                         />
                     ) : (

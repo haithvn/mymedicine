@@ -16,7 +16,7 @@ A full-stack medicine management application built with Next.js, React, and Post
 
 - **Frontend**: [https://mymedicine-frontend.vercel.app](https://mymedicine-frontend.vercel.app)
 - **Backend API**: [https://mymedicine-backend.vercel.app](https://mymedicine-backend.vercel.app)
-- **Android APK**: [Download APK](https://expo.dev/artifacts/eas/mp9RRfCrpxNw87uCx93eCd.apk)
+- **Android APK**: [Download APK](https://expo.dev/artifacts/eas/nzqs47ULbAQN7Ghmk9xjuG.apk)
 
 ## Tech Stack
 
