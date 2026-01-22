@@ -17,15 +17,8 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo [2/3] Logging into Expo...
-echo If you're not logged in, you'll be prompted to enter your credentials.
-call eas whoami 2>nul
-if %errorlevel% neq 0 (
-    echo Not logged in. Please login:
-    call eas login
-) else (
-    echo Already logged in!
-)
+echo [2/3] Preparing Expo...
+echo Please ensure you are logged into Expo (run 'eas login' manually if needed).
 
 echo.
 echo [3/3] Building Android APK...
