@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "myMedicine",
+    "name": "My Medicine",
     "slug": "mobile",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -12,21 +12,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
+      "package": "com.haithvn.mymedicine",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "package": "com.haithvn.mymedicine"
+      }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
+    "description": "A personal medicine tracker to manage medications, prescriptions, and medication reminders.",
     "extra": {
       "eas": {
         "projectId": "05b38f92-ea70-4def-a752-1920c5c4f5d1"
