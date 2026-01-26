@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, useWindowDimensions, ActivityIndicator, Platform, Linking } from 'react-native';
-import { Pill, CheckCircle, Clock, Download, X } from 'lucide-react-native';
+import { Pill, CheckCircle, Clock, Download, X, Languages } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { api } from '../services/api';
+import { changeLanguage, loadSavedLanguage } from '../i18n';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 
 
@@ -49,6 +50,11 @@ export default function Dashboard() {
     useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 1000);
         return () => clearInterval(timer);
+    }, []);
+
+    // Load saved language on mount
+    useEffect(() => {
+        loadSavedLanguage();
     }, []);
 
     const fetchData = async () => {
@@ -141,10 +147,30 @@ export default function Dashboard() {
     return (
         <ScrollView className="flex-1 bg-gray-50">
             <View className="p-6">
-                {/* Header */}
+                {/* Header with Language Switcher */}
                 <View className="mb-8">
-                    <Text className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</Text>
-                    <Text className="text-gray-500 mt-1">{t('dashboard.summary')}</Text>
+                    <View className="flex-row justify-between items-start">
+                        <View className="flex-1">
+                            <Text className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</Text>
+                            <Text className="text-gray-500 mt-1">{t('dashboard.summary')}</Text>
+                        </View>
+                        {/* Language Switcher */}
+                        <View className="flex-row items-center bg-white rounded-xl p-2 shadow-sm border border-gray-100">
+                            <Languages size={16} color="#6B7280" />
+                            <TouchableOpacity
+                                onPress={() => changeLanguage('en')}
+                                className={`ml-2 px-2 py-1 rounded-lg ${i18n.language === 'en' ? 'bg-blue-100' : ''}`}
+                            >
+                                <Text className={`text-sm font-bold ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-400'}`}>EN</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => changeLanguage('vi')}
+                                className={`px-2 py-1 rounded-lg ${i18n.language === 'vi' ? 'bg-blue-100' : ''}`}
+                            >
+                                <Text className={`text-sm font-bold ${i18n.language === 'vi' ? 'text-blue-600' : 'text-gray-400'}`}>VI</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
 
                 {/* Install App Banner - Only on mobile web */}
